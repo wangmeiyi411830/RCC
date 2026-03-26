@@ -15,22 +15,17 @@
 ## 二、完整路径地图
 
 ```
-工作目录（数据源）：
-C:\Users\31718\Desktop\待租单元可视化\
+GitHub 本地仓库（唯一工作目录）：
+C:\Users\31718\Desktop\RCC\
 ├── build_vis_github.py     ← 核心构建脚本（每次更新必须运行这个）
 ├── 待租单元.xlsx           ← 单元数据源（面积、单价、备注等）
 ├── floor_images\           ← 楼层平面图（floor_4.jpg ~ floor_22.jpg）
-└── unit_images\            ← 单元图片（504-1.png, 504-2.jpg ...）
-
-GitHub 本地仓库（发布目录）：
-C:\Users\31718\Desktop\RCC\
+├── unit_images\            ← 单元图片（504-1.png, 504-2.jpg ...）
 ├── index.html              ← 由脚本自动生成，不要手动编辑
-├── floor_images\           ← 从工作目录同步过来的副本
-├── unit_images\            ← 从工作目录同步过来的副本
 └── AI_HANDOFF.md           ← 本文件
 ```
 
-**重要：**`build_vis_github.py` 会自动把生成的 `index.html` 写入 `C:\Users\31718\Desktop\RCC\`，但**图片需要手动同步**（见下方命令）。
+**注意：** 桌面上原来的 `待租单元可视化\` 文件夹已合并到 `RCC\`，**今后所有操作只在 `RCC\` 里进行**。脚本使用相对路径，直接在 `RCC\` 目录下运行即可，无需手动同步图片到其他目录。
 
 ---
 
@@ -41,7 +36,7 @@ C:\Users\31718\Desktop\RCC\
 python -c "
 from PIL import Image
 from pathlib import Path
-img_dir = Path(r'C:\Users\31718\Desktop\待租单元可视化\unit_images')
+img_dir = Path(r'C:\Users\31718\Desktop\RCC\unit_images')
 for f in img_dir.glob('*.jpg'):
     size = f.stat().st_size
     if size > 300 * 1024:
@@ -62,17 +57,11 @@ print('完成')
 
 ### Step 2：重新生成 index.html
 ```powershell
-cd "C:\Users\31718\Desktop\待租单元可视化"
+cd "C:\Users\31718\Desktop\RCC"
 python build_vis_github.py
 ```
 
-### Step 3：同步图片到仓库
-```powershell
-Copy-Item "C:\Users\31718\Desktop\待租单元可视化\unit_images\*" "C:\Users\31718\Desktop\RCC\unit_images\" -Force
-Copy-Item "C:\Users\31718\Desktop\待租单元可视化\floor_images\*" "C:\Users\31718\Desktop\RCC\floor_images\" -Force
-```
-
-### Step 4：推送（用户自己操作）
+### Step 3：推送（用户自己操作）
 用户打开 **GitHub Desktop** → 填写 Summary → **Commit to main** → **Push origin** → 等1-2分钟生效。
 
 ---
