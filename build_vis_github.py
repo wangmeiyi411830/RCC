@@ -48,7 +48,7 @@ for _, row in df.iterrows():
 print('Unit data loaded OK')
 
 # ── 2. Floor images → GitHub URL ──────────────────────────────────────────────
-floors_order = [4,5,6,7,8,9,10,12,'13A',15,16,17,18,19,20,22]
+floors_order = [1,2,4,5,6,7,8,9,10,12,'13A',15,16,17,18,19,20,22]
 floor_images = {}
 img_dir = os.path.join(BASE_DIR, 'floor_images')
 for floor in floors_order:
