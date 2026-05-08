@@ -1,8 +1,8 @@
 import json, os, re
 import pandas as pd
 
-# GitHub raw 图片基础地址
-GITHUB_RAW = 'https://raw.githubusercontent.com/wangmeiyi411830/RCC/main'
+# 图片 CDN 基础地址（jsDelivr 国内有节点，比 raw.githubusercontent.com 快很多）
+GITHUB_RAW = 'https://cdn.jsdelivr.net/gh/wangmeiyi411830/RCC@main'
 
 # ── 脚本所在目录（路径自动适应，无论放在哪个文件夹都能运行）
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
