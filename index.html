@@ -479,29 +479,24 @@ const unitPhotos = {"1003": ["https://cdn.jsdelivr.net/gh/wangmeiyi411830/RCC@ma
 let carouselIndex = 0;
 let carouselPhotos = [];
 
-// ── 后台预加载所有图片 ──────────────────────────────────────
+// ── 按需加载缓存（打开页面只载当前楼层，切楼层时才载对应图）───
 const preloadCache = {};
-function preloadAll() {
-  // 先加载所有楼层平面图
-  Object.values(floorImages).forEach(src => {
-    if (!preloadCache[src]) {
-      const img = new Image();
-      img.src = src;
-      preloadCache[src] = img;
-    }
+function preloadImage(src) {
+  if (!preloadCache[src]) {
+    const img = new Image();
+    img.src = src;
+    preloadCache[src] = img;
+  }
+}
+function preloadFloor(floor) {
+  // 预加载当前楼层的平面图
+  if (floorImages[floor]) preloadImage(floorImages[floor]);
+  // 预加载当前楼层的单元图片
+  const units = floorUnits[floor] || [];
+  units.forEach(u => {
+    const photos = unitPhotos[u.unit];
+    if (photos) photos.forEach(preloadImage);
   });
-  // 再加载所有单元图片（延迟500ms，不抢平面图带宽）
-  setTimeout(() => {
-    Object.values(unitPhotos).forEach(photos => {
-      photos.forEach(src => {
-        if (!preloadCache[src]) {
-          const img = new Image();
-          img.src = src;
-          preloadCache[src] = img;
-        }
-      });
-    });
-  }, 500);
 }
 
 function showCarousel(unitKey, unitLabel) {
@@ -623,6 +618,9 @@ function selectFloor(floor) {
     }
   }
 
+  // 按需加载：切楼层时预载当前楼层的图片
+  preloadFloor(floor);
+
   const units = floorUnits[floor] || [];
   document.getElementById('availCount').textContent = units.length > 0 ? `${units.length} 个待租单元` : '暂无待租单元';
   document.getElementById('unitsTotal').textContent = `${label}`;
@@ -687,9 +685,6 @@ function getTag(note) {
 }
 
 selectFloor(floorsOrder[0]);
-
-// 页面加载完后后台静默预加载所有图片
-window.addEventListener('load', preloadAll);
 </script>
 </body>
 </html>
